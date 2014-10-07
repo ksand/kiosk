@@ -1,7 +1,5 @@
-kiosk
+kiosk->chart
 
-This is an ongoing project written in C and compiled with the GNU
-compiler. It's an infinite loop that plays around with the "ncurses"
-library. I have to give credit to Dan Gookin who wrote the book 
-"Programmers Guide to ncurses" published by Wiley. Dan has a web
-page where you can download sample code. -ksand 10/5/14
+This is a branch of kiosk 1.0.3. It's purpose is to display the
+characters in the current character set in a format similar to
+the old ASCII charts.

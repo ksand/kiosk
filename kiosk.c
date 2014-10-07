@@ -2,49 +2,66 @@
 
 #include <curses.h>
 #include <stdlib.h>
+#include "kiosk.h"
 
-/* colors idefined in /usr/include/ncurses.h
-#define COLOR_BLACK	0
-#define COLOR_RED	1
-#define COLOR_GREEN	2
-#define COLOR_YELLOW	3
-#define COLOR_BLUE	4
-#define COLOR_MAGENTA	5
-#define COLOR_CYAN	6
-#define COLOR_WHITE	7 */
+#define DELAY_SECONDS 2
 
-void routines();
+void genRand(struct windims *wd);
+void initColorPairs();
 
 int main(int argc, char *argv[])
 {
+	int colorpair, row, col;
+	struct windims wd;
+	WINDOW *win;
+	
 	initscr();
 	start_color();
+	initColorPairs();
+
+	colorpair = 1;
 
 	while (1)
 	{
-		/* This is one way to draw a border */
-		init_pair(1, COLOR_CYAN, COLOR_BLACK);
-		color_set(1, NULL);
+		/* Draw a border */
+		color_set(colorpair, NULL);
 		box(stdscr, ACS_VLINE, ACS_HLINE);
+		getmaxyx(stdscr, row, col);
+		wd.maxrow = row;
+		wd.maxcol = col;
+		color_set(7, NULL);
+		mvprintw(row - 2, 2, "%d rows %d cols", row, col);
 		refresh();
-		sleep(2);
+		sleep(DELAY_SECONDS);
+		
+		/* Cycle through the colors 1-7 */
+		colorpair++;
+		
+		if (colorpair > 7)
+			colorpair = 1;
+		
+		/* Generate random window specs */
+		genRand(&wd);
 
-		/* Clear the screen */
+		/* Display the window dimensions on the bottom row */
+		color_set(7, NULL);
+		mvprintw(row - 2, 2, "row=%d col=%d height=%d width=%d", wd.row, wd.col, wd.height, wd.width);
+
+		/* Create a new window */
+		win = newwin(wd.height, wd.width, wd.row, wd.col);
+		wbkgdset(win, COLOR_PAIR(colorpair));
+		box(win, 0, 0);
+		wrefresh(win);
+		refresh();
+		sleep(DELAY_SECONDS);
+
+		/* Destroy the window */
+		wborder(win, ' ', ' ', ' ',' ',' ',' ',' ',' ');
+		wrefresh(win);
+		delwin(win);
 		clear();
 		refresh();
-		sleep(2);
-	
-		/* This is another way to draw a border */
-		init_pair(2, COLOR_MAGENTA, COLOR_BLACK);
-		color_set(2, NULL);
-		border(ACS_VLINE,ACS_VLINE,ACS_HLINE,ACS_HLINE,ACS_ULCORNER,ACS_URCORNER,ACS_LLCORNER,ACS_LRCORNER);
-		refresh();
-		sleep(2);
-	
-		/* Clear the screen */
-		clear();
-		refresh();
-		sleep(2);
+		sleep(DELAY_SECONDS);
 	}
 
 	endwin();

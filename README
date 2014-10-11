@@ -5,3 +5,13 @@ compiler. It's an infinite loop that plays around with the "ncurses"
 library. I have to give credit to Dan Gookin who wrote the book 
 "Programmers Guide to ncurses" published by Wiley. Dan has a web
 page where you can download sample code. -ksand 10/5/14
+
+
+kiosk->chart
+
+This is a branch that uses ncurses to print a character chart.
+
+
+kiosk->noaa
+
+This branch deals with NOAA weather data freely available on the web.

@@ -25,7 +25,8 @@ int main(int argc, char *argv[])
 	struct windims wd;
 	FILE *rpt;
 	time_t t1, t2;
-	
+
+	/* ncurses */
 	initscr();
 	start_color();
 	init_pair(1, COLOR_RED, COLOR_BLACK);
@@ -35,14 +36,12 @@ int main(int argc, char *argv[])
 	init_pair(5, COLOR_MAGENTA, COLOR_BLACK);
 	init_pair(6, COLOR_CYAN, COLOR_BLACK);
 	init_pair(7, COLOR_WHITE, COLOR_BLACK);
+	
+	/* Loop counter */
 	counter = 1;
 
 	while (1)
 	{
-		/* Draw a border */
-		color_set(4, NULL);
-		box(stdscr, ACS_VLINE, ACS_HLINE);
-
 		/* Get the screen dimensions */
 		getmaxyx(stdscr, row, col);
 		wd.maxrow = row;
@@ -88,9 +87,11 @@ int main(int argc, char *argv[])
 				t2 = fs.st_mtime;
 				
 				if (t1 != t2)
+				{
 					sprintf(buf, "%s.TXT exists with new timestamp %lu", scode, t2);
+					klog(buf);
+				}
 
-				klog(buf);
 				sprintf(buf, "%s.TXT", scode);
 				rpt = fopen(buf, "r");
 
@@ -100,7 +101,6 @@ int main(int argc, char *argv[])
 					color_set(2, NULL);
 					while (fgets(buf, BUFSIZE, rpt) != NULL)
 					{
-						buf[wd.maxcol - LCOL - 4] = '\0';
 						mvprintw(row, LCOL, buf);
 						row++;
 					}
@@ -126,6 +126,9 @@ int main(int argc, char *argv[])
 			klog(buf);
 		}
 		
+		/* Draw a border */
+		color_set(4, NULL);
+		box(stdscr, ACS_VLINE, ACS_HLINE);
 		refresh();
 		sleep(DELAY_SECONDS);
 	

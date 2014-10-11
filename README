@@ -14,4 +14,9 @@ This is a branch that uses ncurses to print a character chart.
 
 kiosk->noaa
 
-This branch deals with NOAA weather data freely available on the web.
+This branch deals with NOAA weather data freely available on the web. 
+It uses wget -S and wget -N to download the Metar text file only if
+it's date stamp has changed.
+
+1.0.3.1		First version of kiosk-noaa
+1.0.3.2		Got rid of routines and created logwrite.c

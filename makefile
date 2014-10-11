@@ -1,11 +1,11 @@
-all: kiosk.o routines.o
-	cc -o kiosk kiosk.o routines.o -lncurses
+all: kiosk.o logwrite.o
+	cc -o kiosk kiosk.o logwrite.o -lncurses
 
 kiosk.o: kiosk.c
 	cc -c -Wunused-variable kiosk.c
 
-routines.o: routines.c
-	cc -c -Wunused-variable routines.c
+logwrite.o: logwrite.c
+	cc -c -Wunused-variable logwrite.c
 
 clean:
 	rm *.o
